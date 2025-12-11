@@ -1,120 +1,109 @@
-# Prompt: Create a “Share Snippet” Feature Using Supabase for Legacy Code Horror Meter™
+# Prompt: Generate Horror Leaderboard / Hall of Shame Feature
 
 You are an expert React + TypeScript frontend developer.  
-Your task is to generate a **share snippet feature** for the **Legacy Code Horror Meter™** app using **Supabase**.  
-
-This feature should allow a user to:
-1. Publish their analyzed code snippet (code + horror score + horror factors + optional refactor suggestion + optional author/name) to Supabase.
-2. Receive a unique URL for the snippet.
-3. Allow other users to view the snippet via the URL, including:
-   - Read-only code display (Monaco editor)
-   - Horror Score gauge
-   - Horror factors
-   - Animated ghost mascot and/or spooky sounds based on horror score
+Your task is to generate a **Horror Leaderboard / Hall of Shame** component for the **Legacy Code Horror Meter™** app.
 
 ---
 
-# **Requirements**
+## **Feature Description**
 
-### 1. Supabase Integration
-- Use Supabase JS SDK for client-side access.
-- Assume Supabase project already exists; connection details can be referenced via environment variables:
-  ```ts
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-id (UUID, primary key)
-code (TEXT)
-horrorScore (INTEGER)
-factors (JSON)
-refactorSuggestion (TEXT)
-author (TEXT, optional)
-createdAt (TIMESTAMP)
+The leaderboard should:
+
+1. Display the **Top 10 scariest snippets** submitted by users.  
+2. Show for each snippet:
+   - Horror score
+   - Snippet title / optional author
+   - Key horror factors (optional)
+3. Support **live or mocked data**:
+   - Live: Fetch from **Supabase** or **Firebase**  
+   - Mocked: Use a local array of sample snippets
+4. Trigger **fun UI reactions based on score**:
+   - Medium-high score: flashing warning lights, ghost pops up  
+   - High score: sirens, shaking animation, ghost panics  
+   - Max score: explosion animation, confetti, dramatic spooky sounds
+5. Use **Tailwind CSS**, **shadcn/ui** components, and **Framer Motion** for animations.
+6. Fully **TypeScript** and modular.
+
+---
+
+## **Data Structure**
+
+Assume each snippet has:
+
+```ts
+interface HorrorSnippet {
+  id: string;
+  title: string;
+  author?: string;
+  horrorScore: number;
+  factors: string[];
+  createdAt: string;
+}
 Frontend Components to Generate
-a) /src/components/ShareSnippetButton.tsx
+1. /src/components/HorrorLeaderboard.tsx
 
-Props: code: string, score: number, factors: string[], refactorSuggestion?: string, author?: string
+Props: snippets?: HorrorSnippet[] (optional mocked array)
 
-On click:
+Fetch top 10 snippets by horrorScore from Supabase/Firebase if no props provided
 
-Insert snippet into Supabase
+Display in a vertical leaderboard with ranks 1–10
 
-Generate unique ID / URL
+Include:
 
-Display or copy sharable URL to clipboard
+Score badge
 
-Use Tailwind for styling and shadcn/ui button component.
+Snippet title and author
 
-b) /src/pages/snippet/[id].tsx (Next.js-style dynamic route, or React Router equivalent)
+Optional factors list
 
-Fetch snippet from Supabase by id
+Trigger dynamic animations based on score:
 
-Display:
+50–80 → small ghost pops, flashing lights
 
-Code snippet (Monaco, read-only)
+81–99 → sirens + shake + ghost panic animation
 
-Horror Score (gauge or Framer Motion)
+100+ → confetti, full explosion, loud spooky sound
 
-List of factors
+2. Sound Feedback
 
-Optional refactor suggestion
+Use use-sound NPM package
 
-Ghost mascot and spooky sound feedback based on score
+Sounds vary by score tier:
 
-Handle loading & error states gracefully
+Medium → ghost whispers
 
-c) Sound Feedback
+High → creaks, alarms
 
-Use use-sound package
+Maximum → loud scream / explosion
 
-Trigger sound once on page load based on horror score:
+3. Optional: Interactive Snippet Preview
 
-<30 → soft ambient
+Clicking a snippet in leaderboard opens a modal or side panel:
 
-30–60 → whispering ghost
+Shows code in read-only Monaco editor
 
-60–80 → scary creaks
+Horror score gauge
 
-80+ → loud screech / alarm
+Factors
 
-d) Optional: “Clone & Analyze” Button
+Ghost mascot reacts dynamically
 
-Copies snippet back into main code editor so user can re-analyze or modify
+Requirements
 
-3. General Requirements
+TypeScript + React functional components
 
-All code in TypeScript
+Tailwind CSS + shadcn/ui styling
 
-Functional React components only
+Framer Motion animations for ghost, shake, confetti, and warning lights
 
-Tailwind + shadcn/ui for styling
+Compatible with Supabase or Firebase for live leaderboard
 
-Framer Motion for gauge animations
+Mocked data support if no live backend is connected
 
-Monaco editor for code display
+Provide raw code blocks by file path, e.g.:
 
-Clean, modular, hackathon-friendly code
-
-Assume Vercel deployment (fully client-side, no backend server)
-
-Output raw code blocks by file path, e.g.:
-
-/src/components/ShareSnippetButton.tsx
-<code>
-
-/src/pages/snippet/[id].tsx
+/src/components/HorrorLeaderboard.tsx
 <code>
 
 
-Do not include explanations unless requested.
-
-Goal
-
-Claude should generate a fully functional share snippet feature integrated with Supabase, complete with:
-
-Storing user snippets
-
-Generating a unique URL
-
-Viewing snippet results with interactive visual and sound feedback
-
-Optional cloning back into main editor
+No explanations, just code unless requested

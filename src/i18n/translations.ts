@@ -6,6 +6,10 @@ export interface Translations {
     subtitle: string;
     githubButton: string;
   };
+  navigation: {
+    analyzer: string;
+    leaderboard: string;
+  };
   codeInput: {
     title: string;
     placeholder: string;
@@ -53,10 +57,36 @@ export interface Translations {
     subtitle: string;
   };
   footer: string;
+  shareButton: string;
   fireExplosion: {
     title: string;
     subtitle: string;
     detail: string;
+  };
+  leaderboard: {
+    title: string;
+    loading: string;
+    error: string;
+    noData: string;
+    author: string;
+    rank: string;
+    score: string;
+    viewCode: string;
+    close: string;
+  };
+  submitForm: {
+    title: string;
+    subtitle: string;
+    nameLabel: string;
+    namePlaceholder: string;
+    titleLabel: string;
+    titlePlaceholder: string;
+    submitButton: string;
+    submitting: string;
+    successMessage: string;
+    errorMessage: string;
+    viewLeaderboard: string;
+    skipButton: string;
   };
 }
 
@@ -66,6 +96,10 @@ export const translations: Record<Language, Translations> = {
       title: 'Legacy Code Horror Meter™',
       subtitle: 'Dare to discover how terrifying your legacy tax code really is...',
       githubButton: 'View on GitHub'
+    },
+    navigation: {
+      analyzer: 'Horror Analyzer',
+      leaderboard: 'Hall of Shame'
     },
     codeInput: {
       title: 'Paste Your Legacy Tax Code',
@@ -114,10 +148,36 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Paste or select code, then click "Unleash the Horror Meter!"'
     },
     footer: 'Built with React + TypeScript + Tailwind CSS | Deployed on Vercel | Made with 💀 for legacy code survivors',
+    shareButton: '🏆 Share to Hall of Shame',
     fireExplosion: {
       title: '💀 CRITICAL MELTDOWN! 💀',
       subtitle: '🔥 SYSTEM FAILURE! 🔥',
       detail: '💥 140% HORROR OVERLOAD! 💥'
+    },
+    leaderboard: {
+      title: '🔥 Hall of Shame',
+      loading: 'Loading horrifying code...',
+      error: 'Failed to load leaderboard',
+      noData: 'No horror snippets yet. Be the first to submit!',
+      author: 'Author',
+      rank: 'Rank',
+      score: 'Score',
+      viewCode: 'View Code',
+      close: 'Close'
+    },
+    submitForm: {
+      title: 'Immortalize Your Horror!',
+      subtitle: 'Share your terrifying code with the world',
+      nameLabel: 'Your Name / Team',
+      namePlaceholder: 'e.g., Anonymous Developer',
+      titleLabel: 'Code Horror Title',
+      titlePlaceholder: 'e.g., The Infinite Loop of Doom',
+      submitButton: 'Submit to Hall of Shame',
+      submitting: 'Submitting...',
+      successMessage: '🎉 Your horror has been immortalized!',
+      errorMessage: 'Failed to submit. Please try again.',
+      viewLeaderboard: 'View Hall of Shame',
+      skipButton: 'Skip'
     }
   },
   no: {
@@ -125,6 +185,10 @@ export const translations: Record<Language, Translations> = {
       title: 'Arv-Kode Grøssomåleren™',
       subtitle: 'Tør du å oppdage hvor skremmende din gamle skattekode egentlig er...',
       githubButton: 'Se på GitHub'
+    },
+    navigation: {
+      analyzer: 'Grøssomåler',
+      leaderboard: 'Skammens Hall'
     },
     codeInput: {
       title: 'Lim Inn Din Gamle Skattekode',
@@ -173,10 +237,36 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Lim inn eller velg kode, klikk deretter "Slipp Løs Grøssomåleren!"'
     },
     footer: 'Bygget med React + TypeScript + Tailwind CSS | Deployet på Vercel | Laget med 💀 for overlevende av gammel kode',
+    shareButton: '🏆 Del til Skammens Hall',
     fireExplosion: {
       title: '💀 KRITISK NEDSMELTING! 💀',
       subtitle: '🔥 SYSTEMFEIL! 🔥',
       detail: '💥 140% GRØSSOM-OVERBELASTNING! 💥'
+    },
+    leaderboard: {
+      title: '🔥 Skammens Hall',
+      loading: 'Laster forferdelig kode...',
+      error: 'Kunne ikke laste topplisten',
+      noData: 'Ingen grøssomme kodebiter ennå. Bli den første!',
+      author: 'Forfatter',
+      rank: 'Rangering',
+      score: 'Poeng',
+      viewCode: 'Vis Kode',
+      close: 'Lukk'
+    },
+    submitForm: {
+      title: 'Forevige Din Skrekkode!',
+      subtitle: 'Del din skremmende kode med verden',
+      nameLabel: 'Ditt Navn / Team',
+      namePlaceholder: 'f.eks., Anonym Utvikler',
+      titleLabel: 'Skrekkode Tittel',
+      titlePlaceholder: 'f.eks., Den Evige Løkken av Undergang',
+      submitButton: 'Send til Skammens Hall',
+      submitting: 'Sender inn...',
+      successMessage: '🎉 Din skrekkode er nå foreviget!',
+      errorMessage: 'Kunne ikke sende inn. Prøv igjen.',
+      viewLeaderboard: 'Se Skammens Hall',
+      skipButton: 'Hopp over'
     }
   }
 };

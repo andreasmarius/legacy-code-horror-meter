@@ -5,9 +5,11 @@ import { HorrorMeter } from '@/components/HorrorMeter';
 import { AnalysisPanel } from '@/components/AnalysisPanel';
 import { GhostMascot } from '@/components/GhostMascot';
 import { FireExplosion } from '@/components/FireExplosion';
+import { HorrorLeaderboard } from '@/components/HorrorLeaderboard';
+import { SubmitToLeaderboard } from '@/components/SubmitToLeaderboard';
 import { calculateHorrorScore } from '@/logic/calculateHorrorScore';
 import { HorrorResult } from '@/types';
-import { FaGithub, FaSkull } from 'react-icons/fa';
+import { FaGithub, FaSkull, FaTrophy } from 'react-icons/fa';
 import { soundEffects } from '@/utils/soundEffects';
 import { Language, getTranslation } from '@/i18n/translations';
 import '@/styles/globals.css';
@@ -18,6 +20,8 @@ const App: React.FC = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showExplosion, setShowExplosion] = useState(false);
   const [language, setLanguage] = useState<Language>('en');
+  const [currentView, setCurrentView] = useState<'analyzer' | 'leaderboard'>('analyzer');
+  const [showSubmitForm, setShowSubmitForm] = useState(false);
 
   const t = getTranslation(language);
 
@@ -48,7 +52,17 @@ const App: React.FC = () => {
     // Clear results when code changes
     if (result) {
       setResult(null);
+      setShowSubmitForm(false);
     }
+  };
+
+  const handleSubmitSuccess = () => {
+    setShowSubmitForm(false);
+    setCurrentView('leaderboard');
+  };
+
+  const handleSkipSubmit = () => {
+    setShowSubmitForm(false);
   };
 
   return (
@@ -97,10 +111,40 @@ const App: React.FC = () => {
             <span className="text-sm">{t.header.githubButton}</span>
           </a>
         </div>
+
+        {/* Navigation Tabs */}
+        <div className="flex items-center justify-center gap-4 mt-8">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setCurrentView('analyzer')}
+            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+              currentView === 'analyzer'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
+                : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+            }`}
+          >
+            🔬 {t.navigation.analyzer}
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setCurrentView('leaderboard')}
+            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+              currentView === 'leaderboard'
+                ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-lg'
+                : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+            }`}
+          >
+            🔥 {t.navigation.leaderboard}
+          </motion.button>
+        </div>
       </motion.header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto">
+      {/* Main Content - Conditional Rendering */}
+      {currentView === 'analyzer' ? (
+        /* Analyzer View */
+        <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column: Code Input */}
           <div>
@@ -117,20 +161,45 @@ const App: React.FC = () => {
           <div className="space-y-8">
             <AnimatePresence mode="wait">
               {result ? (
-                <>
-                  <HorrorMeter
-                    key="meter"
-                    score={result.score}
-                    severity={result.severity}
-                    translations={t.horrorMeter}
+                showSubmitForm ? (
+                  /* Submit Form */
+                  <SubmitToLeaderboard
+                    key="submit"
+                    result={result}
+                    code={code}
+                    translations={t.submitForm}
+                    onSuccess={handleSubmitSuccess}
+                    onSkip={handleSkipSubmit}
                   />
-                  <AnalysisPanel
-                    key="panel"
-                    factors={result.factors}
-                    refactorSuggestion={result.refactorSuggestion}
-                    translations={t.analysisPanel}
-                  />
-                </>
+                ) : (
+                  /* Analysis Results */
+                  <>
+                    <HorrorMeter
+                      key="meter"
+                      score={result.score}
+                      severity={result.severity}
+                      translations={t.horrorMeter}
+                    />
+                    <AnalysisPanel
+                      key="panel"
+                      factors={result.factors}
+                      refactorSuggestion={result.refactorSuggestion}
+                      translations={t.analysisPanel}
+                    />
+                    {/* Share Button */}
+                    <motion.button
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setShowSubmitForm(true)}
+                      className="w-full px-6 py-4 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white font-bold text-lg rounded-lg shadow-lg hover:shadow-yellow-500/50 transition-all flex items-center justify-center gap-3"
+                    >
+                      <FaTrophy className="text-2xl" />
+                      {t.shareButton}
+                    </motion.button>
+                  </>
+                )
               ) : (
                 <motion.div
                   key="placeholder"
@@ -157,15 +226,23 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
+      ) : (
+        /* Leaderboard View */
+        <div className="max-w-7xl mx-auto">
+          <HorrorLeaderboard translations={t.leaderboard} />
+        </div>
+      )}
 
-      {/* Ghost Mascot */}
-      <GhostMascot
-        severity={result?.severity || 'low'}
-        isVisible={!!result}
-        translations={t.ghostMascot}
-      />
+      {/* Ghost Mascot - Only show in analyzer view */}
+      {currentView === 'analyzer' && (
+        <GhostMascot
+          severity={result?.severity || 'low'}
+          isVisible={!!result}
+          translations={t.ghostMascot}
+        />
+      )}
 
-      {/* Fire Explosion Effect for Score 100 */}
+      {/* Fire Explosion Effect for Score >= 100 */}
       <FireExplosion isActive={showExplosion} translations={t.fireExplosion} />
 
       {/* Footer */}
