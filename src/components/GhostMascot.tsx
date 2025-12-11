@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaGhost } from 'react-icons/fa';
 
 interface GhostMascotProps {
-  severity: 'low' | 'medium' | 'high' | 'extreme';
+  severity: 'low' | 'medium' | 'high' | 'critical';
   isVisible: boolean;
 }
 
@@ -30,10 +30,10 @@ export const GhostMascot: React.FC<GhostMascotProps> = ({ severity, isVisible })
           message: 'This is horrifying!',
           color: 'text-orange-400'
         };
-      case 'extreme':
+      case 'critical':
         return {
           emoji: '💀',
-          message: 'I CANNOT EVEN!',
+          message: 'SYSTEM MELTDOWN!',
           color: 'text-red-400'
         };
     }
@@ -47,12 +47,12 @@ export const GhostMascot: React.FC<GhostMascotProps> = ({ severity, isVisible })
       animate={{
         opacity: 1,
         y: 0,
-        rotate: severity === 'extreme' ? [0, -10, 10, -10, 0] : 0
+        rotate: severity === 'critical' ? [0, -10, 10, -10, 0] : 0
       }}
       transition={{
         duration: 0.8,
         rotate: {
-          repeat: severity === 'extreme' ? Infinity : 0,
+          repeat: severity === 'critical' ? Infinity : 0,
           duration: 0.5
         }
       }}
@@ -67,11 +67,11 @@ export const GhostMascot: React.FC<GhostMascotProps> = ({ severity, isVisible })
         <div className="relative">
           <motion.div
             animate={{
-              scale: severity === 'extreme' ? [1, 1.1, 1] : 1
+              scale: severity === 'critical' ? [1, 1.1, 1] : 1
             }}
             transition={{
               duration: 0.5,
-              repeat: severity === 'extreme' ? Infinity : 0
+              repeat: severity === 'critical' ? Infinity : 0
             }}
           >
             <FaGhost className={`text-8xl ${expression.color} drop-shadow-2xl animate-float`} />
@@ -99,8 +99,8 @@ export const GhostMascot: React.FC<GhostMascotProps> = ({ severity, isVisible })
           </div>
         </motion.div>
 
-        {/* Glow effect for extreme horror */}
-        {severity === 'extreme' && (
+        {/* Glow effect for critical horror */}
+        {severity === 'critical' && (
           <motion.div
             animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ duration: 1, repeat: Infinity }}

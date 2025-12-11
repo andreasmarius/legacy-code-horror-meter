@@ -8,6 +8,7 @@ import { FireExplosion } from '@/components/FireExplosion';
 import { calculateHorrorScore } from '@/logic/calculateHorrorScore';
 import { HorrorResult } from '@/types';
 import { FaGithub, FaSkull } from 'react-icons/fa';
+import { soundEffects } from '@/utils/soundEffects';
 import '@/styles/globals.css';
 
 const App: React.FC = () => {
@@ -28,10 +29,13 @@ const App: React.FC = () => {
     setResult(horrorResult);
     setIsAnalyzing(false);
 
-    // Trigger explosion effect for maximum horror (score 100)
-    if (horrorResult.score === 100) {
+    // Play sound effect based on severity
+    soundEffects.playSeveritySound(horrorResult.severity);
+
+    // Trigger explosion effect for critical horror (score >= 100)
+    if (horrorResult.score >= 100) {
       setShowExplosion(true);
-      setTimeout(() => setShowExplosion(false), 4000);
+      setTimeout(() => setShowExplosion(false), 5000);
     }
   };
 

@@ -218,14 +218,15 @@ function countSuspiciousNames(code: string): number {
 
 function calculateScore(factors: HorrorFactor[]): number {
   const totalSeverity = factors.reduce((sum, factor) => sum + factor.severity, 0);
-  return Math.min(Math.round(totalSeverity), 100);
+  // Allow scores to go up to 140% for truly horrific code
+  return Math.min(Math.round(totalSeverity), 140);
 }
 
-function getSeverity(score: number): 'low' | 'medium' | 'high' | 'extreme' {
+function getSeverity(score: number): 'low' | 'medium' | 'high' | 'critical' {
   if (score < 25) return 'low';
   if (score < 50) return 'medium';
   if (score < 75) return 'high';
-  return 'extreme';
+  return 'critical';
 }
 
 function generateRefactorSuggestion(factors: HorrorFactor[], metrics: AnalysisMetrics): string {

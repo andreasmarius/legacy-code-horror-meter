@@ -5,7 +5,7 @@ import { FaSkull, FaFire, FaGhost } from 'react-icons/fa';
 
 interface HorrorMeterProps {
   score: number;
-  severity: 'low' | 'medium' | 'high' | 'extreme';
+  severity: 'low' | 'medium' | 'high' | 'critical';
 }
 
 export const HorrorMeter: React.FC<HorrorMeterProps> = ({ score, severity }) => {
@@ -32,18 +32,19 @@ export const HorrorMeter: React.FC<HorrorMeterProps> = ({ score, severity }) => 
           emoji: '💀',
           icon: <FaSkull className="text-red-500" />
         };
-      case 'extreme':
+      case 'critical':
         return {
           colors: ['#ff0000', '#8b0000', '#4b0000'],
-          text: 'BURN IT WITH FIRE!',
-          emoji: '🔥',
-          icon: <FaFire className="text-orange-500" />
+          text: 'CRITICAL MELTDOWN!',
+          emoji: '💥',
+          icon: <FaFire className="text-orange-500 animate-pulse" />
         };
     }
   };
 
   const theme = getColorScheme();
-  const normalizedScore = score / 100;
+  // Allow score to exceed 100% and display up to 140%
+  const normalizedScore = Math.min(score / 140, 1);
 
   return (
     <motion.div
@@ -51,12 +52,12 @@ export const HorrorMeter: React.FC<HorrorMeterProps> = ({ score, severity }) => 
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, type: 'spring' }}
       className={`horror-card text-center ${
-        severity === 'extreme' ? 'animate-shake blood-glow' : ''
+        severity === 'critical' ? 'animate-shake blood-glow' : ''
       } ${severity === 'high' ? 'spooky-glow' : ''}`}
     >
       <motion.div
-        animate={severity === 'extreme' ? { rotate: [0, -5, 5, -5, 0] } : {}}
-        transition={{ duration: 0.5, repeat: severity === 'extreme' ? Infinity : 0 }}
+        animate={severity === 'critical' ? { rotate: [0, -5, 5, -5, 0] } : {}}
+        transition={{ duration: 0.5, repeat: severity === 'critical' ? Infinity : 0 }}
       >
         <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
           {theme.icon && (
@@ -95,7 +96,7 @@ export const HorrorMeter: React.FC<HorrorMeterProps> = ({ score, severity }) => 
         >
           <div
             className={`text-2xl font-bold ${
-              severity === 'extreme'
+              severity === 'critical'
                 ? 'text-red-500 animate-pulse'
                 : severity === 'high'
                 ? 'text-orange-500'
@@ -108,22 +109,35 @@ export const HorrorMeter: React.FC<HorrorMeterProps> = ({ score, severity }) => 
           </div>
 
           <div className="mt-2 text-sm text-gray-400">
-            Score: <span className="font-mono text-white">{score}/100</span>
+            Score: <span className={`font-mono text-white ${score > 100 ? 'text-red-400 text-xl font-bold' : ''}`}>{score}/140</span>
+            {score > 100 && (
+              <motion.span
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 0.5, repeat: Infinity }}
+                className="ml-2 text-red-500 font-bold"
+              >
+                OVERLOAD!
+              </motion.span>
+            )}
           </div>
         </motion.div>
 
-        {severity === 'extreme' && (
+        {severity === 'critical' && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="mt-6 p-4 bg-red-900/30 border border-red-500 rounded-lg"
+            animate={{ opacity: 1, y: 0, scale: [1, 1.05, 1] }}
+            transition={{ delay: 0.8, scale: { duration: 1, repeat: Infinity } }}
+            className="mt-6 p-4 bg-red-900/50 border-2 border-red-500 rounded-lg animate-pulse"
           >
-            <p className="text-red-300 font-semibold">
-              ⚠️ This code has achieved legendary horror status!
+            <p className="text-red-200 font-bold text-lg">
+              🚨 CRITICAL HORROR LEVEL DETECTED 🚨
             </p>
-            <p className="text-sm text-red-400 mt-2">
-              Recommend immediate refactoring before it gains sentience.
+            <p className="text-sm text-red-300 mt-2">
+              {score > 100 ? (
+                <span className="font-bold">SYSTEM OVERLOAD! This code breaks the horror scale! Immediate deletion recommended!</span>
+              ) : (
+                'This code has achieved legendary horror status! Recommend immediate refactoring before it gains sentience.'
+              )}
             </p>
           </motion.div>
         )}

@@ -25,6 +25,114 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive }) => {
 
   return (
     <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
+      {/* Page Disintegration Effect - Pixelated Breakdown */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ 
+          opacity: [0, 0.3, 0.7, 1],
+          scale: [1, 1.05, 0.95, 1.1]
+        }}
+        transition={{ duration: 1.5 }}
+        className="absolute inset-0"
+        style={{
+          background: `
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 2px,
+              rgba(255, 0, 0, 0.3) 2px,
+              rgba(255, 0, 0, 0.3) 4px
+            ),
+            repeating-linear-gradient(
+              90deg,
+              transparent,
+              transparent 2px,
+              rgba(255, 100, 0, 0.3) 2px,
+              rgba(255, 100, 0, 0.3) 4px
+            )
+          `,
+          mixBlendMode: 'multiply'
+        }}
+      />
+
+      {/* Glitch Overlay Effect */}
+      <motion.div
+        animate={{
+          x: [0, -5, 5, -5, 5, 0],
+          opacity: [0, 0.7, 0, 0.7, 0, 0.7, 0]
+        }}
+        transition={{
+          duration: 0.3,
+          repeat: 10,
+          ease: 'linear'
+        }}
+        className="absolute inset-0 bg-gradient-to-r from-red-500/50 via-transparent to-blue-500/50"
+      />
+
+      {/* Crack Lines Spreading Across Screen */}
+      {Array.from({ length: 12 }, (_, i) => (
+        <motion.div
+          key={`crack-${i}`}
+          initial={{ 
+            pathLength: 0,
+            opacity: 0
+          }}
+          animate={{ 
+            pathLength: 1,
+            opacity: [0, 1, 0.8]
+          }}
+          transition={{
+            duration: 0.8,
+            delay: i * 0.1,
+            ease: 'easeOut'
+          }}
+          className="absolute inset-0"
+        >
+          <svg className="w-full h-full" style={{ filter: 'drop-shadow(0 0 3px rgba(255, 0, 0, 0.8))' }}>
+            <motion.line
+              x1={`${Math.random() * 50}%`}
+              y1={`${Math.random() * 50}%`}
+              x2={`${50 + Math.random() * 50}%`}
+              y2={`${50 + Math.random() * 50}%`}
+              stroke="rgba(255, 0, 0, 0.6)"
+              strokeWidth="2"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+            />
+          </svg>
+        </motion.div>
+      ))}
+
+      {/* Page Fragments Breaking Apart */}
+      {Array.from({ length: 20 }, (_, i) => (
+        <motion.div
+          key={`fragment-${i}`}
+          initial={{
+            x: `${Math.random() * 100}vw`,
+            y: `${Math.random() * 100}vh`,
+            opacity: 1,
+            rotate: 0,
+            scale: 1
+          }}
+          animate={{
+            x: `${Math.random() * 200 - 50}vw`,
+            y: `${Math.random() * 200 - 50}vh`,
+            opacity: [1, 1, 0],
+            rotate: Math.random() * 720 - 360,
+            scale: [1, 0.5, 0]
+          }}
+          transition={{
+            duration: 2,
+            delay: 0.3 + Math.random() * 0.5,
+            ease: 'easeOut'
+          }}
+          className="absolute w-16 h-16 bg-gradient-to-br from-gray-900 to-gray-700 border border-red-500"
+          style={{
+            clipPath: 'polygon(20% 0%, 80% 10%, 100% 60%, 70% 100%, 10% 90%, 0% 40%)'
+          }}
+        />
+      ))}
       {/* Red Vignette Overlay */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -177,13 +285,13 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive }) => {
           duration: 3,
           times: [0, 0.3, 0.5, 0.8, 1]
         }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-10"
         style={{
           textShadow: '0 0 20px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 100, 0, 0.6)'
         }}
       >
-        <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 drop-shadow-2xl animate-pulse">
-          💀 MAXIMUM HORROR! 💀
+        <div className="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 drop-shadow-2xl animate-pulse">
+          💀 CRITICAL MELTDOWN! 💀
         </div>
         <motion.div
           animate={{
@@ -194,17 +302,17 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive }) => {
             duration: 0.5,
             repeat: Infinity
           }}
-          className="text-4xl font-bold text-red-500 mt-4 drop-shadow-lg"
+          className="text-5xl font-bold text-red-500 mt-4 drop-shadow-lg"
         >
-          🔥 CODE IS ON FIRE! 🔥
+          🔥 SYSTEM FAILURE! 🔥
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: [0, 1, 1], y: 0 }}
           transition={{ delay: 0.5 }}
-          className="text-2xl font-bold text-yellow-300 mt-4"
+          className="text-3xl font-bold text-yellow-300 mt-4"
         >
-          ⚠️ EVACUATE IMMEDIATELY! ⚠️
+          💥 140% HORROR OVERLOAD! 💥
         </motion.div>
       </motion.div>
 

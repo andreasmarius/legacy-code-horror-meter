@@ -2,7 +2,7 @@ export interface HorrorResult {
   score: number;
   factors: HorrorFactor[];
   refactorSuggestion: string;
-  severity: 'low' | 'medium' | 'high' | 'extreme';
+  severity: 'low' | 'medium' | 'high' | 'critical';
 }
 
 export interface HorrorFactor {
