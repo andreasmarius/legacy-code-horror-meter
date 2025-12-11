@@ -29,7 +29,7 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive, translat
   }));
 
   return (
-    <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
+    <div className="fixed inset-0 z-[9999] overflow-hidden bg-black flex items-center justify-center">
       {/* Page Disintegration Effect - Pixelated Breakdown */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -300,14 +300,14 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive, translat
         </div>
         <motion.div
           animate={{
-            scale: [1, 1.1, 1],
+            scale: [1, 1.2, 1],
             opacity: [0.8, 1, 0.8]
           }}
           transition={{
             duration: 0.5,
             repeat: Infinity
           }}
-          className="text-5xl font-bold text-red-500 mt-4 drop-shadow-lg"
+          className="text-7xl font-bold text-red-500 mt-6 drop-shadow-[0_0_30px_rgba(255,0,0,1)]"
         >
           🔥 {translations.subtitle} 🔥
         </motion.div>
@@ -315,14 +315,14 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive, translat
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: [0, 1, 1], y: 0 }}
           transition={{ delay: 0.5 }}
-          className="text-3xl font-bold text-yellow-300 mt-4"
+          className="text-5xl font-bold text-yellow-300 mt-6 drop-shadow-[0_0_20px_rgba(255,255,0,1)]"
         >
           💥 {translations.detail} 💥
         </motion.div>
       </motion.div>
 
       {/* Falling Skulls */}
-      {Array.from({ length: 15 }, (_, i) => (
+      {Array.from({ length: 20 }, (_, i) => (
         <motion.div
           key={`skull-${i}`}
           initial={{
@@ -341,7 +341,8 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive, translat
             delay: Math.random() * 1.5,
             ease: 'linear'
           }}
-          className="absolute text-6xl"
+          className="absolute text-7xl"
+          style={{ filter: 'drop-shadow(0 0 10px rgba(255, 0, 0, 0.8))' }}
         >
           💀
         </motion.div>

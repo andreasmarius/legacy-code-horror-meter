@@ -58,6 +58,11 @@ export interface Translations {
   };
   footer: string;
   shareButton: string;
+  perfectCode: {
+    title: string;
+    subtitle: string;
+    message: string;
+  };
   fireExplosion: {
     title: string;
     subtitle: string;
@@ -149,6 +154,11 @@ export const translations: Record<Language, Translations> = {
     },
     footer: 'Built with React + TypeScript + Tailwind CSS | Deployed on Vercel | Made with 💀 for legacy code survivors',
     shareButton: '🏆 Share to Hall of Shame',
+    perfectCode: {
+      title: '✨ PERFECTION ACHIEVED! ✨',
+      subtitle: '🏆 Zero Horror Points! 🏆',
+      message: 'Your code is cleaner than a whistle! 🎉'
+    },
     fireExplosion: {
       title: '💀 CRITICAL MELTDOWN! 💀',
       subtitle: '🔥 SYSTEM FAILURE! 🔥',
@@ -238,6 +248,11 @@ export const translations: Record<Language, Translations> = {
     },
     footer: 'Bygget med React + TypeScript + Tailwind CSS | Deployet på Vercel | Laget med 💀 for overlevende av gammel kode',
     shareButton: '🏆 Del til Skammens Hall',
+    perfectCode: {
+      title: '✨ PERFEKSJON OPPNÅDD! ✨',
+      subtitle: '🏆 Null Grøssompoeng! 🏆',
+      message: 'Koden din er renere enn rent! 🎉'
+    },
     fireExplosion: {
       title: '💀 KRITISK NEDSMELTING! 💀',
       subtitle: '🔥 SYSTEMFEIL! 🔥',

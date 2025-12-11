@@ -5,6 +5,7 @@ import { HorrorMeter } from '@/components/HorrorMeter';
 import { AnalysisPanel } from '@/components/AnalysisPanel';
 import { GhostMascot } from '@/components/GhostMascot';
 import { FireExplosion } from '@/components/FireExplosion';
+import { PerfectCodeCelebration } from '@/components/PerfectCodeCelebration';
 import { HorrorLeaderboard } from '@/components/HorrorLeaderboard';
 import { SubmitToLeaderboard } from '@/components/SubmitToLeaderboard';
 import { calculateHorrorScore } from '@/logic/calculateHorrorScore';
@@ -19,6 +20,7 @@ const App: React.FC = () => {
   const [result, setResult] = useState<HorrorResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showExplosion, setShowExplosion] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const [language, setLanguage] = useState<Language>('en');
   const [currentView, setCurrentView] = useState<'analyzer' | 'leaderboard'>('analyzer');
   const [showSubmitForm, setShowSubmitForm] = useState(false);
@@ -40,6 +42,12 @@ const App: React.FC = () => {
     // Play sound effect based on severity
     soundEffects.playSeveritySound(horrorResult.severity);
 
+    // Trigger celebration for perfect code (score = 0)
+    if (horrorResult.score === 0) {
+      setShowCelebration(true);
+      setTimeout(() => setShowCelebration(false), 5000);
+    }
+
     // Trigger explosion effect for critical horror (score >= 100)
     if (horrorResult.score >= 100) {
       setShowExplosion(true);
@@ -53,6 +61,8 @@ const App: React.FC = () => {
     if (result) {
       setResult(null);
       setShowSubmitForm(false);
+      setShowCelebration(false);
+      setShowExplosion(false);
     }
   };
 
@@ -244,6 +254,9 @@ const App: React.FC = () => {
 
       {/* Fire Explosion Effect for Score >= 100 */}
       <FireExplosion isActive={showExplosion} translations={t.fireExplosion} />
+
+      {/* Perfect Code Celebration for Score = 0 */}
+      <PerfectCodeCelebration isActive={showCelebration} translations={t.perfectCode} />
 
       {/* Footer */}
       <motion.footer
