@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white min-h-screen;
+  }
+}
+
+@layer components {
+  .horror-card {
+    @apply bg-gray-800/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-6 shadow-xl;
+  }
+
+  .horror-button {
+    @apply px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg;
+  }
+
+  .horror-input {
+    @apply bg-gray-700/50 border border-purple-500/30 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500;
+  }
+}
+
+.spooky-glow {
+  box-shadow: 0 0 20px rgba(160, 32, 240, 0.5),
+              0 0 40px rgba(160, 32, 240, 0.3),
+              0 0 60px rgba(160, 32, 240, 0.1);
+}
+
+.blood-glow {
+  box-shadow: 0 0 20px rgba(139, 0, 0, 0.6),
+              0 0 40px rgba(139, 0, 0, 0.4),
+              0 0 60px rgba(139, 0, 0, 0.2);
+}

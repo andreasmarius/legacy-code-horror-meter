@@ -1,0 +1,120 @@
+import React from 'react';
+import Editor from '@monaco-editor/react';
+import { motion } from 'framer-motion';
+import { FaCode, FaSkull } from 'react-icons/fa';
+import { legacySamples } from '@/mock/legacySamples';
+
+interface CodeInputProps {
+  code: string;
+  onCodeChange: (code: string) => void;
+  onAnalyze: () => void;
+  isAnalyzing: boolean;
+}
+
+export const CodeInput: React.FC<CodeInputProps> = ({
+  code,
+  onCodeChange,
+  onAnalyze,
+  isAnalyzing
+}) => {
+  const [selectedSample, setSelectedSample] = React.useState<string>('');
+
+  const handleSampleSelect = (sampleId: string) => {
+    const sample = legacySamples.find(s => s.id === sampleId);
+    if (sample) {
+      onCodeChange(sample.code);
+      setSelectedSample(sampleId);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="horror-card space-y-4"
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <FaCode className="text-3xl text-purple-400" />
+          <div>
+            <h2 className="text-2xl font-bold">Paste Your Legacy Code</h2>
+            <p className="text-gray-400 text-sm">
+              Dare to see the horror score...
+            </p>
+          </div>
+        </div>
+        <FaSkull className="text-4xl text-red-500 animate-pulse" />
+      </div>
+
+      {/* Sample Selector */}
+      <div className="space-y-2">
+        <label className="text-sm font-semibold text-purple-300">
+          Or try a sample:
+        </label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          {legacySamples.map((sample) => (
+            <button
+              key={sample.id}
+              onClick={() => handleSampleSelect(sample.id)}
+              className={`p-3 rounded-lg border text-left transition-all ${
+                selectedSample === sample.id
+                  ? 'border-purple-500 bg-purple-500/20'
+                  : 'border-purple-500/30 bg-gray-700/30 hover:border-purple-500/60 hover:bg-gray-700/50'
+              }`}
+            >
+              <div className="font-semibold text-sm">{sample.title}</div>
+              <div className="text-xs text-gray-400 mt-1">
+                {sample.description}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Code Editor */}
+      <div className="border border-purple-500/30 rounded-lg overflow-hidden">
+        <Editor
+          height="400px"
+          defaultLanguage="javascript"
+          language="javascript"
+          theme="vs-dark"
+          value={code}
+          onChange={(value) => onCodeChange(value || '')}
+          options={{
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: 'on',
+            scrollBeyondLastLine: false,
+            automaticLayout: true,
+            tabSize: 2,
+            wordWrap: 'on',
+            padding: { top: 16, bottom: 16 }
+          }}
+        />
+      </div>
+
+      {/* Analyze Button */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={onAnalyze}
+        disabled={!code.trim() || isAnalyzing}
+        className={`horror-button w-full py-4 text-lg font-bold flex items-center justify-center gap-3 ${
+          !code.trim() || isAnalyzing
+            ? 'opacity-50 cursor-not-allowed'
+            : 'cursor-pointer'
+        }`}
+      >
+        <FaSkull className={isAnalyzing ? 'animate-spin' : 'animate-bounce'} />
+        {isAnalyzing ? 'Analyzing Horror...' : 'Unleash the Horror Meter!'}
+      </motion.button>
+
+      {!code.trim() && (
+        <p className="text-center text-sm text-gray-400 italic">
+          Paste some code or select a sample to begin...
+        </p>
+      )}
+    </motion.div>
+  );
+};
