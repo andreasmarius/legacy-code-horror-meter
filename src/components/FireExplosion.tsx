@@ -3,9 +3,14 @@ import { motion } from 'framer-motion';
 
 interface FireExplosionProps {
   isActive: boolean;
+  translations: {
+    title: string;
+    subtitle: string;
+    detail: string;
+  };
 }
 
-export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive }) => {
+export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive, translations }) => {
   if (!isActive) return null;
 
   const fireParticles = Array.from({ length: 50 }, (_, i) => ({
@@ -291,7 +296,7 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive }) => {
         }}
       >
         <div className="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 drop-shadow-2xl animate-pulse">
-          💀 CRITICAL MELTDOWN! 💀
+          💀 {translations.title} 💀
         </div>
         <motion.div
           animate={{
@@ -304,7 +309,7 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive }) => {
           }}
           className="text-5xl font-bold text-red-500 mt-4 drop-shadow-lg"
         >
-          🔥 SYSTEM FAILURE! 🔥
+          🔥 {translations.subtitle} 🔥
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -312,7 +317,7 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive }) => {
           transition={{ delay: 0.5 }}
           className="text-3xl font-bold text-yellow-300 mt-4"
         >
-          💥 140% HORROR OVERLOAD! 💥
+          💥 {translations.detail} 💥
         </motion.div>
       </motion.div>
 

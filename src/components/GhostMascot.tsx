@@ -5,9 +5,17 @@ import { FaGhost } from 'react-icons/fa';
 interface GhostMascotProps {
   severity: 'low' | 'medium' | 'high' | 'critical';
   isVisible: boolean;
+  translations: {
+    messages: {
+      low: string;
+      medium: string;
+      high: string;
+      critical: string;
+    };
+  };
 }
 
-export const GhostMascot: React.FC<GhostMascotProps> = ({ severity, isVisible }) => {
+export const GhostMascot: React.FC<GhostMascotProps> = ({ severity, isVisible, translations }) => {
   if (!isVisible) return null;
 
   const getGhostExpression = () => {
@@ -15,25 +23,25 @@ export const GhostMascot: React.FC<GhostMascotProps> = ({ severity, isVisible })
       case 'low':
         return {
           emoji: '😊',
-          message: 'Not too bad!',
+          message: translations.messages.low,
           color: 'text-green-400'
         };
       case 'medium':
         return {
           emoji: '😰',
-          message: 'Getting spooky...',
+          message: translations.messages.medium,
           color: 'text-yellow-400'
         };
       case 'high':
         return {
           emoji: '😱',
-          message: 'This is horrifying!',
+          message: translations.messages.high,
           color: 'text-orange-400'
         };
       case 'critical':
         return {
           emoji: '💀',
-          message: 'SYSTEM MELTDOWN!',
+          message: translations.messages.critical,
           color: 'text-red-400'
         };
     }

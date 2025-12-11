@@ -9,13 +9,21 @@ interface CodeInputProps {
   onCodeChange: (code: string) => void;
   onAnalyze: () => void;
   isAnalyzing: boolean;
+  translations: {
+    title: string;
+    placeholder: string;
+    analyzeButton: string;
+    analyzing: string;
+    selectSample: string;
+  };
 }
 
 export const CodeInput: React.FC<CodeInputProps> = ({
   code,
   onCodeChange,
   onAnalyze,
-  isAnalyzing
+  isAnalyzing,
+  translations
 }) => {
   const [selectedSample, setSelectedSample] = React.useState<string>('');
 
@@ -38,9 +46,9 @@ export const CodeInput: React.FC<CodeInputProps> = ({
         <div className="flex items-center gap-3">
           <FaCode className="text-3xl text-purple-400" />
           <div>
-            <h2 className="text-2xl font-bold">Paste Your Legacy Code</h2>
+            <h2 className="text-2xl font-bold">{translations.title}</h2>
             <p className="text-gray-400 text-sm">
-              Dare to see the horror score...
+              {translations.placeholder}
             </p>
           </div>
         </div>
@@ -50,7 +58,7 @@ export const CodeInput: React.FC<CodeInputProps> = ({
       {/* Sample Selector */}
       <div className="space-y-2">
         <label className="text-sm font-semibold text-purple-300">
-          Or try a sample:
+          {translations.selectSample}
         </label>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {legacySamples.map((sample) => (
@@ -107,7 +115,7 @@ export const CodeInput: React.FC<CodeInputProps> = ({
         }`}
       >
         <FaSkull className={isAnalyzing ? 'animate-spin' : 'animate-bounce'} />
-        {isAnalyzing ? 'Analyzing Horror...' : 'Unleash the Horror Meter!'}
+        {isAnalyzing ? translations.analyzing : translations.analyzeButton}
       </motion.button>
 
       {!code.trim() && (

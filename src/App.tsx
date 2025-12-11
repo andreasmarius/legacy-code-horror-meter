@@ -9,6 +9,7 @@ import { calculateHorrorScore } from '@/logic/calculateHorrorScore';
 import { HorrorResult } from '@/types';
 import { FaGithub, FaSkull } from 'react-icons/fa';
 import { soundEffects } from '@/utils/soundEffects';
+import { Language, getTranslation } from '@/i18n/translations';
 import '@/styles/globals.css';
 
 const App: React.FC = () => {
@@ -16,6 +17,9 @@ const App: React.FC = () => {
   const [result, setResult] = useState<HorrorResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showExplosion, setShowExplosion] = useState(false);
+  const [language, setLanguage] = useState<Language>('en');
+
+  const t = getTranslation(language);
 
   const handleAnalyze = async () => {
     if (!code.trim()) return;
@@ -53,8 +57,19 @@ const App: React.FC = () => {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-12"
+        className="text-center mb-12 relative"
       >
+        {/* Language Toggle */}
+        <div className="absolute top-0 right-0">
+          <button
+            onClick={() => setLanguage(language === 'en' ? 'no' : 'en')}
+            className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors font-semibold"
+          >
+            <span className="text-2xl">{language === 'en' ? '🇳🇴' : '🇬🇧'}</span>
+            <span>{language === 'en' ? 'Norsk' : 'English'}</span>
+          </button>
+        </div>
+
         <motion.div
           animate={{ rotate: [0, -5, 5, -5, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
@@ -64,11 +79,11 @@ const App: React.FC = () => {
         </motion.div>
         
         <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
-          Legacy Code Horror Meter™
+          {t.header.title}
         </h1>
         
         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-          Dare to discover how terrifying your legacy tax code really is...
+          {t.header.subtitle}
         </p>
 
         <div className="flex items-center justify-center gap-4 mt-6">
@@ -79,7 +94,7 @@ const App: React.FC = () => {
             className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
           >
             <FaGithub className="text-xl" />
-            <span className="text-sm">View on GitHub</span>
+            <span className="text-sm">{t.header.githubButton}</span>
           </a>
         </div>
       </motion.header>
@@ -94,6 +109,7 @@ const App: React.FC = () => {
               onCodeChange={handleCodeChange}
               onAnalyze={handleAnalyze}
               isAnalyzing={isAnalyzing}
+              translations={t.codeInput}
             />
           </div>
 
@@ -106,11 +122,13 @@ const App: React.FC = () => {
                     key="meter"
                     score={result.score}
                     severity={result.severity}
+                    translations={t.horrorMeter}
                   />
                   <AnalysisPanel
                     key="panel"
                     factors={result.factors}
                     refactorSuggestion={result.refactorSuggestion}
+                    translations={t.analysisPanel}
                   />
                 </>
               ) : (
@@ -128,10 +146,10 @@ const App: React.FC = () => {
                     <FaSkull className="text-6xl text-gray-600 mx-auto mb-4" />
                   </motion.div>
                   <h3 className="text-2xl font-bold text-gray-400 mb-2">
-                    Awaiting Analysis...
+                    {t.placeholder.title}
                   </h3>
                   <p className="text-gray-500">
-                    Paste or select code, then click "Unleash the Horror Meter!"
+                    {t.placeholder.subtitle}
                   </p>
                 </motion.div>
               )}
@@ -144,10 +162,11 @@ const App: React.FC = () => {
       <GhostMascot
         severity={result?.severity || 'low'}
         isVisible={!!result}
+        translations={t.ghostMascot}
       />
 
       {/* Fire Explosion Effect for Score 100 */}
-      <FireExplosion isActive={showExplosion} />
+      <FireExplosion isActive={showExplosion} translations={t.fireExplosion} />
 
       {/* Footer */}
       <motion.footer
@@ -157,9 +176,7 @@ const App: React.FC = () => {
         className="text-center mt-16 mb-8 text-gray-500 text-sm"
       >
         <p>
-          Built with React + TypeScript + Tailwind CSS | 
-          Deployed on Vercel | 
-          Made with 💀 for legacy code survivors
+          {t.footer}
         </p>
       </motion.footer>
     </div>

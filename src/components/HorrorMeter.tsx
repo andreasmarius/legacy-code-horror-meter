@@ -6,36 +6,50 @@ import { FaSkull, FaFire, FaGhost } from 'react-icons/fa';
 interface HorrorMeterProps {
   score: number;
   severity: 'low' | 'medium' | 'high' | 'critical';
+  translations: {
+    title: string;
+    scoreLabel: string;
+    overload: string;
+    severityLevels: {
+      low: string;
+      medium: string;
+      high: string;
+      critical: string;
+    };
+    criticalWarning: string;
+    criticalMessage: string;
+    overloadMessage: string;
+  };
 }
 
-export const HorrorMeter: React.FC<HorrorMeterProps> = ({ score, severity }) => {
+export const HorrorMeter: React.FC<HorrorMeterProps> = ({ score, severity, translations }) => {
   const getColorScheme = () => {
     switch (severity) {
       case 'low':
         return {
           colors: ['#00ff41', '#ffff00', '#ff9900'],
-          text: 'Relatively Clean',
+          text: translations.severityLevels.low,
           emoji: '😊',
           icon: null
         };
       case 'medium':
         return {
           colors: ['#ffff00', '#ff9900', '#ff0000'],
-          text: 'Needs Attention',
+          text: translations.severityLevels.medium,
           emoji: '😰',
           icon: <FaGhost className="text-yellow-400" />
         };
       case 'high':
         return {
           colors: ['#ff9900', '#ff0000', '#8b0000'],
-          text: 'Code Horror!',
+          text: translations.severityLevels.high,
           emoji: '💀',
           icon: <FaSkull className="text-red-500" />
         };
       case 'critical':
         return {
           colors: ['#ff0000', '#8b0000', '#4b0000'],
-          text: 'CRITICAL MELTDOWN!',
+          text: translations.severityLevels.critical,
           emoji: '💥',
           icon: <FaFire className="text-orange-500 animate-pulse" />
         };
@@ -68,7 +82,7 @@ export const HorrorMeter: React.FC<HorrorMeterProps> = ({ score, severity }) => 
               {theme.icon}
             </motion.div>
           )}
-          Horror Score
+          {translations.title}
           <span className="text-5xl">{theme.emoji}</span>
         </h2>
 
@@ -109,14 +123,14 @@ export const HorrorMeter: React.FC<HorrorMeterProps> = ({ score, severity }) => 
           </div>
 
           <div className="mt-2 text-sm text-gray-400">
-            Score: <span className={`font-mono text-white ${score > 100 ? 'text-red-400 text-xl font-bold' : ''}`}>{score}/140</span>
+            {translations.scoreLabel}: <span className={`font-mono text-white ${score > 100 ? 'text-red-400 text-xl font-bold' : ''}`}>{score}/140</span>
             {score > 100 && (
               <motion.span
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 0.5, repeat: Infinity }}
                 className="ml-2 text-red-500 font-bold"
               >
-                OVERLOAD!
+                {translations.overload}
               </motion.span>
             )}
           </div>
@@ -130,13 +144,13 @@ export const HorrorMeter: React.FC<HorrorMeterProps> = ({ score, severity }) => 
             className="mt-6 p-4 bg-red-900/50 border-2 border-red-500 rounded-lg animate-pulse"
           >
             <p className="text-red-200 font-bold text-lg">
-              🚨 CRITICAL HORROR LEVEL DETECTED 🚨
+              🚨 {translations.criticalWarning} 🚨
             </p>
             <p className="text-sm text-red-300 mt-2">
               {score > 100 ? (
-                <span className="font-bold">SYSTEM OVERLOAD! This code breaks the horror scale! Immediate deletion recommended!</span>
+                <span className="font-bold">{translations.overloadMessage}</span>
               ) : (
-                'This code has achieved legendary horror status! Recommend immediate refactoring before it gains sentience.'
+                translations.criticalMessage
               )}
             </p>
           </motion.div>
