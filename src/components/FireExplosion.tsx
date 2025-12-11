@@ -29,7 +29,7 @@ export const FireExplosion: React.FC<FireExplosionProps> = ({ isActive, translat
   }));
 
   return (
-    <div className="fixed inset-0 z-[9999] overflow-hidden bg-black flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
       {/* Page Disintegration Effect - Pixelated Breakdown */}
       <motion.div
         initial={{ opacity: 0 }}
