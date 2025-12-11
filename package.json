@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "A spooky code analysis tool for legacy tax code",
   "main": "dist/bundle.js",
-  "engines": {
-    "node": "20.x",
-    "npm": "10.x"
-  },
   "scripts": {
     "dev": "webpack serve --mode development --open",
     "build": "webpack --mode production",
