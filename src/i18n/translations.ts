@@ -16,6 +16,10 @@ export interface Translations {
     analyzeButton: string;
     analyzing: string;
     selectSample: string;
+    githubUrl: string;
+    githubPlaceholder: string;
+    fetchingCode: string;
+    fetchError: string;
   };
   horrorMeter: {
     title: string;
@@ -111,7 +115,11 @@ export const translations: Record<Language, Translations> = {
       placeholder: '// Paste your horrifying legacy tax calculation code here...\n// The meter will analyze and rate its horror level!',
       analyzeButton: 'Unleash the Horror Meter!',
       analyzing: 'Analyzing Horror Level...',
-      selectSample: 'Or select a sample'
+      selectSample: 'Or select a sample',
+      githubUrl: 'Or fetch from GitHub',
+      githubPlaceholder: 'https://github.com/user/repo/blob/main/file.js',
+      fetchingCode: 'Fetching...',
+      fetchError: 'Failed to fetch code from GitHub. Check the URL and try again.'
     },
     horrorMeter: {
       title: 'Horror Score',
@@ -204,8 +212,12 @@ export const translations: Record<Language, Translations> = {
       title: 'Lim Inn Din Gamle Skattekode',
       placeholder: '// Lim inn din skrekkelige gamle skatteberegningskode her...\n// Måleren vil analysere og vurdere grøssomhetsnivået!',
       analyzeButton: 'Slipp Løs Grøssomåleren!',
-      analyzing: 'Analyserer Grøssomhetsnivå...',
-      selectSample: 'Eller velg et eksempel'
+      analyzing: 'Analyserer Grøssomhetssnivå...',
+      selectSample: 'Eller velg et eksempel',
+      githubUrl: 'Eller hent fra GitHub',
+      githubPlaceholder: 'https://github.com/bruker/repo/blob/main/fil.js',
+      fetchingCode: 'Henter...',
+      fetchError: 'Kunne ikke hente kode fra GitHub. Sjekk URL-en og prøv igjen.'
     },
     horrorMeter: {
       title: 'Grøssom-Poeng',
