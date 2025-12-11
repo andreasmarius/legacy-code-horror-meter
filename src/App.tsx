@@ -4,6 +4,7 @@ import { CodeInput } from '@/components/CodeInput';
 import { HorrorMeter } from '@/components/HorrorMeter';
 import { AnalysisPanel } from '@/components/AnalysisPanel';
 import { GhostMascot } from '@/components/GhostMascot';
+import { FireExplosion } from '@/components/FireExplosion';
 import { calculateHorrorScore } from '@/logic/calculateHorrorScore';
 import { HorrorResult } from '@/types';
 import { FaGithub, FaSkull } from 'react-icons/fa';
@@ -13,6 +14,7 @@ const App: React.FC = () => {
   const [code, setCode] = useState<string>('');
   const [result, setResult] = useState<HorrorResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showExplosion, setShowExplosion] = useState(false);
 
   const handleAnalyze = async () => {
     if (!code.trim()) return;
@@ -25,6 +27,12 @@ const App: React.FC = () => {
     const horrorResult = calculateHorrorScore(code);
     setResult(horrorResult);
     setIsAnalyzing(false);
+
+    // Trigger explosion effect for maximum horror (score 100)
+    if (horrorResult.score === 100) {
+      setShowExplosion(true);
+      setTimeout(() => setShowExplosion(false), 4000);
+    }
   };
 
   const handleCodeChange = (newCode: string) => {
@@ -133,6 +141,9 @@ const App: React.FC = () => {
         severity={result?.severity || 'low'}
         isVisible={!!result}
       />
+
+      {/* Fire Explosion Effect for Score 100 */}
+      <FireExplosion isActive={showExplosion} />
 
       {/* Footer */}
       <motion.footer
