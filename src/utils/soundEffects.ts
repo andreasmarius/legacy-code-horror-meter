@@ -3,6 +3,9 @@
 
 class SoundEffects {
   private audioContext: AudioContext | null = null;
+  private ambientOscillators: OscillatorNode[] = [];
+  private ambientGains: GainNode[] = [];
+  private isAmbientPlaying: boolean = false;
 
   private getAudioContext(): AudioContext {
     if (!this.audioContext) {
@@ -151,8 +154,163 @@ class SoundEffects {
         break;
       case 'critical':
         this.playMaximumHorror();
+        this.playScream(); // Add scream for critical
         break;
     }
+  }
+
+  // Scream sound effect for Stage 4
+  playScream() {
+    const ctx = this.getAudioContext();
+    
+    // Create a rising scream effect
+    for (let i = 0; i < 3; i++) {
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      oscillator.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      const startTime = ctx.currentTime + 0.3 + (i * 0.2);
+      
+      // Rising frequency for scream effect
+      oscillator.frequency.setValueAtTime(200 + (i * 100), startTime);
+      oscillator.frequency.exponentialRampToValueAtTime(800 + (i * 200), startTime + 0.5);
+      oscillator.type = 'sawtooth';
+      
+      filter.type = 'bandpass';
+      filter.frequency.value = 500 + (i * 200);
+      filter.Q.value = 10;
+      
+      gainNode.gain.setValueAtTime(0, startTime);
+      gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.1);
+      gainNode.gain.linearRampToValueAtTime(0, startTime + 0.5);
+
+      oscillator.start(startTime);
+      oscillator.stop(startTime + 0.5);
+    }
+
+    // Add distorted noise for scream texture
+    const bufferSize = ctx.sampleRate * 0.8;
+    const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = (Math.random() * 2 - 1) * Math.sin(i / 100);
+    }
+    
+    const noise = ctx.createBufferSource();
+    const noiseGain = ctx.createGain();
+    const noiseFilter = ctx.createBiquadFilter();
+    
+    noise.buffer = noiseBuffer;
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
+    
+    noiseFilter.type = 'highpass';
+    noiseFilter.frequency.value = 1000;
+    
+    noiseGain.gain.setValueAtTime(0, ctx.currentTime + 0.5);
+    noiseGain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.6);
+    noiseGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.3);
+    
+    noise.start(ctx.currentTime + 0.5);
+    noise.stop(ctx.currentTime + 1.3);
+  }
+
+  // Start ambient horror music
+  startAmbientMusic() {
+    if (this.isAmbientPlaying) return;
+    
+    const ctx = this.getAudioContext();
+    this.isAmbientPlaying = true;
+    
+    // Dark ambient pad with multiple oscillators
+    const frequencies = [55, 82.5, 110, 165]; // Dark bass notes
+    
+    frequencies.forEach((freq, index) => {
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+      
+      oscillator.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      oscillator.frequency.value = freq;
+      oscillator.type = 'sine';
+      
+      filter.type = 'lowpass';
+      filter.frequency.value = 300;
+      filter.Q.value = 1;
+      
+      // Very low volume for ambient background
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.03 + (index * 0.005), ctx.currentTime + 2);
+      
+      oscillator.start();
+      
+      this.ambientOscillators.push(oscillator);
+      this.ambientGains.push(gainNode);
+    });
+    
+    // Add subtle pulse effect
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    
+    lfo.frequency.value = 0.1; // Very slow pulse
+    lfo.type = 'sine';
+    lfoGain.gain.value = 0.01;
+    
+    lfo.connect(lfoGain);
+    this.ambientGains.forEach(gain => lfoGain.connect(gain.gain));
+    
+    lfo.start();
+    this.ambientOscillators.push(lfo);
+  }
+
+  // Stop ambient music
+  stopAmbientMusic() {
+    if (!this.isAmbientPlaying) return;
+    
+    const ctx = this.getAudioContext();
+    
+    // Fade out
+    this.ambientGains.forEach(gain => {
+      gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1);
+    });
+    
+    // Stop all oscillators after fade
+    setTimeout(() => {
+      this.ambientOscillators.forEach(osc => {
+        try {
+          osc.stop();
+        } catch (e) {
+          // Already stopped
+        }
+      });
+      this.ambientOscillators = [];
+      this.ambientGains = [];
+      this.isAmbientPlaying = false;
+    }, 1100);
+  }
+
+  // Toggle ambient music
+  toggleAmbientMusic(): boolean {
+    if (this.isAmbientPlaying) {
+      this.stopAmbientMusic();
+      return false;
+    } else {
+      this.startAmbientMusic();
+      return true;
+    }
+  }
+
+  // Check if ambient music is playing
+  isAmbientActive(): boolean {
+    return this.isAmbientPlaying;
   }
 }
 

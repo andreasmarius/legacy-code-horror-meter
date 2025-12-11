@@ -10,7 +10,7 @@ import { HorrorLeaderboard } from '@/components/HorrorLeaderboard';
 import { SubmitToLeaderboard } from '@/components/SubmitToLeaderboard';
 import { calculateHorrorScore } from '@/logic/calculateHorrorScore';
 import { HorrorResult } from '@/types';
-import { FaGithub, FaSkull, FaTrophy } from 'react-icons/fa';
+import { FaGithub, FaSkull, FaTrophy, FaMusic, FaVolumeMute } from 'react-icons/fa';
 import { soundEffects } from '@/utils/soundEffects';
 import { Language, getTranslation } from '@/i18n/translations';
 import '@/styles/globals.css';
@@ -24,8 +24,14 @@ const App: React.FC = () => {
   const [language, setLanguage] = useState<Language>('en');
   const [currentView, setCurrentView] = useState<'analyzer' | 'leaderboard'>('analyzer');
   const [showSubmitForm, setShowSubmitForm] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   const t = getTranslation(language);
+
+  const toggleMusic = () => {
+    const isPlaying = soundEffects.toggleAmbientMusic();
+    setIsMusicPlaying(isPlaying);
+  };
 
   const handleAnalyze = async () => {
     if (!code.trim()) return;
@@ -84,7 +90,27 @@ const App: React.FC = () => {
         className="text-center mb-12 relative"
       >
         {/* Language Toggle */}
-        <div className="absolute top-0 right-0">
+        <div className="absolute top-0 right-0 flex gap-2">
+          {/* Music Toggle */}
+          <button
+            onClick={toggleMusic}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors font-semibold"
+            title={isMusicPlaying ? 'Stop ambient music' : 'Play ambient music'}
+          >
+            {isMusicPlaying ? (
+              <>
+                <FaMusic className="text-green-400" />
+                <span className="hidden sm:inline">Music On</span>
+              </>
+            ) : (
+              <>
+                <FaVolumeMute className="text-gray-400" />
+                <span className="hidden sm:inline">Music Off</span>
+              </>
+            )}
+          </button>
+          
+          {/* Language Toggle */}
           <button
             onClick={() => setLanguage(language === 'en' ? 'no' : 'en')}
             className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors font-semibold"
