@@ -48,8 +48,8 @@ const App: React.FC = () => {
       setTimeout(() => setShowCelebration(false), 5000);
     }
 
-    // Trigger explosion effect for critical horror (score >= 100)
-    if (horrorResult.score >= 100) {
+    // Trigger explosion effect ONLY for extreme horror (score > 100)
+    if (horrorResult.score > 100) {
       setShowExplosion(true);
       setTimeout(() => setShowExplosion(false), 5000);
     }
@@ -252,10 +252,10 @@ const App: React.FC = () => {
         />
       )}
 
-      {/* Fire Explosion Effect for Score >= 100 */}
+      {/* Fire Explosion Effect - Stage 4 (Score > 100) - FULLSCREEN TAKEOVER */}
       <FireExplosion isActive={showExplosion} translations={t.fireExplosion} />
 
-      {/* Perfect Code Celebration for Score = 0 */}
+      {/* Perfect Code Celebration - Stage 1 (Score = 0) */}
       <PerfectCodeCelebration isActive={showCelebration} translations={t.perfectCode} />
 
       {/* Footer */}

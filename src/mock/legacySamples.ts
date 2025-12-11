@@ -3,11 +3,11 @@ import { LegacySample } from '@/types';
 export const legacySamples: LegacySample[] = [
   {
     id: 'simple-good',
-    title: '✅ Stage 1: Clean Modern Code',
-    description: 'Well-written TypeScript - Low horror score',
+    title: '✅ Stage 1: Perfect Clean Code',
+    description: 'Flawless modern code - Zero horror score',
     language: 'typescript',
-    code: `// Modern Tax Calculator - TypeScript
-// Clean, type-safe, and maintainable
+    code: `// Perfect Tax Calculator - Modern TypeScript
+// Clean, type-safe, well-documented, and maintainable
 
 interface TaxBracket {
   minIncome: number;
@@ -15,13 +15,16 @@ interface TaxBracket {
   rate: number;
 }
 
-const NORWEGIAN_TAX_BRACKETS_2024: TaxBracket[] = [
-  { minIncome: 0, maxIncome: 190350, rate: 0.22 },
-  { minIncome: 190350, maxIncome: 267900, rate: 0.27 },
-  { minIncome: 267900, maxIncome: 643800, rate: 0.31 },
-  { minIncome: 643800, maxIncome: 969200, rate: 0.35 },
-  { minIncome: 969200, maxIncome: Infinity, rate: 0.38 }
-];
+const TAX_CONFIG = {
+  year: 2024,
+  brackets: [
+    { minIncome: 0, maxIncome: 190350, rate: 0.22 },
+    { minIncome: 190350, maxIncome: 267900, rate: 0.27 },
+    { minIncome: 267900, maxIncome: 643800, rate: 0.31 },
+    { minIncome: 643800, maxIncome: 969200, rate: 0.35 },
+    { minIncome: 969200, maxIncome: Infinity, rate: 0.38 }
+  ] as const
+};
 
 function calculateTax(income: number): number {
   if (income <= 0) {
@@ -30,23 +33,23 @@ function calculateTax(income: number): number {
 
   let totalTax = 0;
   
-  for (const bracket of NORWEGIAN_TAX_BRACKETS_2024) {
+  for (const bracket of TAX_CONFIG.brackets) {
     if (income <= bracket.minIncome) {
       break;
     }
     
-    const taxableInBracket = Math.min(
+    const taxableAmount = Math.min(
       income - bracket.minIncome,
       bracket.maxIncome - bracket.minIncome
     );
     
-    totalTax += taxableInBracket * bracket.rate;
+    totalTax += taxableAmount * bracket.rate;
   }
   
   return Math.round(totalTax);
 }
 
-export { calculateTax, TaxBracket };
+export { calculateTax, TAX_CONFIG };
 `
   },
   {
@@ -95,68 +98,50 @@ function validateIncome(val) {
   {
     id: 'norwegian-tax-high',
     title: '💀 Stage 3: Code Horror',
-    description: 'Multiple serious issues - High horror',
+    description: 'Multiple serious issues - High horror (70-100)',
     language: 'javascript',
-    code: `// Tax Calculator - DO NOT TOUCH!!!
-// Last modified: 2010
-// TODO: Update everything
-// FIXME: Breaks for high incomes
-// XXX: Why does this even work?
+    code: `// Tax Calculator - Legacy Code
+// Last modified: 2012
+// TODO: Refactor this mess
+// FIXME: Update tax rates
 
-var x = 0.22;
-var y = 0.27;
-var z = 0.31;
-var a = 190000;
-var b = 270000;
+var rate1 = 0.22;
+var rate2 = 0.27;
+var rate3 = 0.31;
+var bracket1 = 190000;
+var bracket2 = 270000;
 
-function calc(val) {
-  var r = 0;
-  var temp = val;
+function calculateTax(income) {
+  var tax = 0;
+  var temp = income;
   
   if (temp > 0) {
-    if (temp <= a) {
-      r = temp * x;
+    if (temp <= bracket1) {
+      tax = temp * rate1;
     } else {
-      if (temp > a && temp <= b) {
-        r = a * x;
-        r = r + (temp - a) * y;
+      if (temp > bracket1 && temp <= bracket2) {
+        tax = bracket1 * rate1;
+        tax = tax + (temp - bracket1) * rate2;
       } else {
-        if (temp > b) {
-          r = a * x;
-          r = r + (b - a) * y;
-          r = r + (temp - b) * z;
+        if (temp > bracket2) {
+          tax = bracket1 * rate1;
+          tax = tax + (bracket2 - bracket1) * rate2;
+          tax = tax + (temp - bracket2) * rate3;
         }
       }
     }
   }
   
-  // Mystery adjustments
-  r = r * 0.98;
-  r = r * 1.02;
+  // Mystery adjustment
+  tax = tax * 0.98;
   
-  try {
-    var data = getData();
-    eval(data); // Security risk!
-  } catch (e) {
-    // Silent failure
-  }
-  
-  return r;
+  return tax;
 }
 
-function getData() {
-  return "r = r * 1.0";
-}
-
-// Unused functions
-function foo(bar) {
-  var baz = bar;
-  return baz;
-}
-
-function helper(p) {
-  var q = p;
-  return q;
+// Unused helper
+function helper(x) {
+  var y = x;
+  return y;
 }
 `
   },

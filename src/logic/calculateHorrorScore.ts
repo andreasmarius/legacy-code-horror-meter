@@ -129,10 +129,23 @@ function detectHorrorFactors(code: string, metrics: AnalysisMetrics): HorrorFact
 }
 
 function countMagicNumbers(code: string): number {
-  // Match standalone numbers that aren't 0, 1, or in obvious contexts
-  const numberPattern = /\b(?<![\w.])((?!0\b|1\b)\d+(?:\.\d+)?)\b(?![\w.])/g;
-  const matches = code.match(numberPattern) || [];
-  return matches.length;
+  // Remove object literals and array definitions (configuration is OK)
+  const withoutConfig = code
+    .replace(/\{[^{}]*:[^{}]*\}/g, '') // Remove simple objects
+    .replace(/\[[^\[\]]*\]/g, ''); // Remove arrays
+  
+  // Match standalone numbers that aren't 0, 1, or common constants
+  const numberPattern = /\b(?<![\w.])((?!0\b|1\b|2\b|100\b)\d{3,})\b(?![\w.])/g;
+  const matches = withoutConfig.match(numberPattern) || [];
+  
+  // Filter out numbers that are clearly configuration values
+  const magicNumbers = matches.filter(num => {
+    const n = parseInt(num);
+    // Exclude year-like numbers (2000-2099) and common round numbers
+    return !(n >= 2000 && n <= 2099) && n % 1000 !== 0;
+  });
+  
+  return magicNumbers.length;
 }
 
 function countNestedConditions(code: string): number {
@@ -157,17 +170,20 @@ function countTodos(code: string): number {
 }
 
 function countHardcodedValues(code: string): number {
-  // Look for patterns like tax brackets, percentages
+  // Only flag hardcoded values in direct assignments or operations (not in config objects)
+  // Remove object/array configurations first
+  const withoutConfig = code
+    .replace(/\{[^{}]*:[^{}]*\}/g, '')
+    .replace(/const\s+\w+\s*=\s*\{[\s\S]*?\};?/g, '');
+  
   const patterns = [
-    /\b\d+\s*%/g,  // Percentage values
-    /\btax\w*\s*=\s*\d+/gi,  // Tax assignments
-    /\brate\s*=\s*\d+/gi,  // Rate assignments
-    /\b(0\.\d+)\b/g  // Decimal values
+    /\btax\w*\s*=\s*\d+/gi,  // Direct tax assignments
+    /\brate\s*=\s*\d+/gi,  // Direct rate assignments (not in objects)
   ];
   
   let count = 0;
   patterns.forEach(pattern => {
-    count += (code.match(pattern) || []).length;
+    count += (withoutConfig.match(pattern) || []).length;
   });
   
   return count;
@@ -223,9 +239,10 @@ function calculateScore(factors: HorrorFactor[]): number {
 }
 
 function getSeverity(score: number): 'low' | 'medium' | 'high' | 'critical' {
-  if (score < 25) return 'low';
-  if (score < 50) return 'medium';
-  if (score < 75) return 'high';
+  if (score === 0) return 'low';
+  if (score < 40) return 'low';
+  if (score < 70) return 'medium';
+  if (score <= 100) return 'high';
   return 'critical';
 }
 
