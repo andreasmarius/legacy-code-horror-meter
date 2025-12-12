@@ -1,8 +1,8 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "npm install --legacy-peer-deps --no-audit --prefer-offline && npm run build",
   "outputDirectory": "dist",
   "framework": null,
-  "installCommand": "npm install --legacy-peer-deps --loglevel verbose",
+  "installCommand": "echo 'Skipping default install'",
   "rewrites": [
     {
       "source": "/(.*)",
